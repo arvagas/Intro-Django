@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from .models import PersonalNote
+from .models import Note, PersonalNote
 
 class PersonalNoteSerializer(serializers.HyperlinkedModelSerializer):
     # Inner class nested inside PersonalNoteSerializer
@@ -12,5 +12,15 @@ class PersonalNoteSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('title', 'content')
 
 class PersonalNoteViewSet(viewsets.ModelViewSet):
+    # Links viewset to serializer
     serializer_class = PersonalNoteSerializer
-    queryset = PersonalNote.objects.all()
+    # Create an empty dictionary of the correct type
+    queryset = Note.objects.none()
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_anonymous:
+            return PersonalNote.objects.none()
+        else:
+            return PersonalNote.objects.filter(user=user)
