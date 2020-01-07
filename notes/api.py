@@ -1,5 +1,5 @@
 from rest_framework import serializers, viewsets
-from models import PersonalNote
+from .models import PersonalNote
 
 class PersonalNoteSerializer(serializers.HyperlinkedModelSerializer):
     # Inner class nested inside PersonalNoteSerializer
